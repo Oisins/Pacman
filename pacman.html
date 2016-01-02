@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="algorythems.js"></script>
+    <script>
+        var FPS = 100;
+        
+        var boardText = [
+            "###############################################",
+            "#..........r..........#.......................#",
+            "#.###.###############...#################.###.#",
+            "#.###.................#............d......###.#",
+            "#.###.########.#####.#######.#####.######.###.#",
+            "#.###.########.#####.#######.#####.######.###.#",
+            "#..............#####%#######.#####............#",
+            "#.###.########.#####.#######.#####.######.###.#",
+            "#.###.########.#####.#######.#####.######.###.#",
+            "#.###.....l...........#..........l........###.#",
+            "#.###.###############...#################.###.#",
+            "#.....................#.......................#",
+            "###############################################"
+        ];
+
+
+        var board;
+
+        function Entity(board, row, col, icon) {
+            this.board = board
+            this.row = row;
+            this.col = col;
+            this.icon = icon;
+
+            this.vx = 1;
+            this.vy = 0;
+
+            Entity.prototype.move = function () {}
+        }
+
+        function Board(boardText) {
+            this.score=0;
+
+            //2d array with element for each cell on board
+            this.cells = [];
+
+            this.width = boardText[0].length;
+            this.height = boardText.length;
+
+            this.entities = [];
+            this.player;
+            this.lastKeyEvent = "";
+
+            var boardDiv = document.getElementById("boardDiv");
+
+
+            var tmp = "<table>";
+
+            //convert the boar to a 2d array
+            for (r = 0; r < this.height; r++) {
+                tmp += "<tr>";
+                this.cells[r] = new Array();
+                for (c = 0; c < this.width; c++) {
+                    var t = boardText[r].substr(c, 1);
+                    if (t == "#" || t == ".") {
+                        //wall or coin
+                    } else if (t == "%") {
+                        this.player = new Entity(this, r, c, "pacman.png");
+                        this.player.move = movePacman;
+                        this.entities.push(this.player);
+                        t = " ";
+                    } else {
+                        //assume monster
+                        var m = new Entity(this, r, c, "monster.png");
+
+                        if (t == "r") {
+                            m.move = moveRight;
+                        } else if (t == "l") {
+                            m.move = moveLeft;
+                        } else if (t == "d") {
+                            m.move = moveRandom;
+                            m.icon = "monster-blue.png"
+                        }
+
+                        this.entities.push(m);
+                        t = ".";
+                    }
+                    this.cells[r][c] = t;
+                    tmp += "<td id=\"" + r + "-" + c + "\"/>";
+                }
+                tmp += "</tr>";
+            }
+
+            tmp += "</table>";
+            boardDiv.innerHTML = tmp;
+            
+            for (i in this.entities) {
+                    var m = this.entities[i];
+                    var cell = $("#" + m.row + "-" + m.col);
+                    cell.html("<img src='" + m.icon + "'/>");
+                }
+
+            Board.prototype.drawBoard = function () {
+                for (r = 0; r < this.height; r++) {
+                    for (c = 0; c < this.width; c++) {
+                        var cellDiv = $("#" + r + "-" + c);
+                        if (this.cells[r][c] == "#") {
+                            cellDiv.css("background-color", "blue");
+                        } else if (this.cells[r][c] == ".") {
+                            cellDiv.html("<img src='coin.png'/>");
+                        } else {
+                            cellDiv.html(this.cells[r][c]);
+                        }
+                    }
+                }
+
+                for (i in this.entities) {
+                    var m = this.entities[i];
+                    var cell = $("#" + m.row + "-" + m.col);
+                    cell.html("<img src='" + m.icon + "'/>");
+                }
+
+
+                statsDiv.innerHTML = "";
+                statsDiv.innerHTML += "score:" + this.score + "<br/>";
+                statsDiv.innerHTML += "w:" + this.width + "<br/>";
+                statsDiv.innerHTML += "h:" + this.height + "<br/>";
+                statsDiv.innerHTML += "lastKeyEvent:" + this.lastKeyEvent.keyCode + "<br/>";
+                statsDiv.innerHTML += "pacmanNextVX:" + pacmanNextVX + "<br/>";
+                statsDiv.innerHTML += "pacmanNextVY:" + pacmanNextVY + "<br/>";
+                statsDiv.innerHTML += "entities:" + this.entities.length + "<br/>";
+
+                for (i in this.entities) {
+                    var m = this.entities[i];
+                    statsDiv.innerHTML += "<div id='"+i+"' class='statsdiv'></div>";
+                    var tmp = "Entity " + i + ":<br/>";
+                    tmp += "icon :" + "<img src='" + m.icon + "'/><br/>";
+                    tmp += "vx: " + m.vx + "<br/>";
+                    tmp += "vy: " + m.vy + "<br/>";
+                    //statsDiv.innerHTML += "<br/>";
+                    $("#"+i).html(tmp);
+                }
+
+            }
+
+            Board.prototype.move = function () {
+                for (i in this.entities) {
+                    this.entities[i].move(this.entities[i]);
+                }
+                //check if hit by monster
+                
+            }
+
+        }
+
+
+        var moveLeftRight = function (entity, dir) {
+            var r = entity.row + entity.vy;
+            var c = entity.col + entity.vx;
+
+            var t = entity.board.cells[r][c];
+            if (t != ' ' && t != '.') {
+                if (entity.vx != 0) {
+                    entity.vy = entity.vx * dir;
+                    entity.vx = 0;
+                } else {
+                    entity.vx = -(entity.vy * dir);
+                    entity.vy = 0;
+                }
+                entity.move(entity);
+            } else {
+                entity.row = r;
+                entity.col = c;
+            }
+        }
+
+        function moveRight(entity) {
+            moveLeftRight(entity, 1);
+        }
+
+        function moveLeft(entity) {
+            moveLeftRight(entity, -1);
+        }
+
+        function moveRandom(entity) {
+            if (Math.floor(Math.random() * 2) == 0) {
+                moveLeftRight(entity, -1);
+            } else {
+                moveLeftRight(entity, 1);
+            }
+
+        }
+
+        var movePacman = function () {
+            var r = this.row + pacmanNextVY;
+            var c = this.col + pacmanNextVX;
+
+            var t = board.cells[r][c];
+            if (t == ' ' || t == '.') {
+                this.vx = pacmanNextVX;
+                this.vy = pacmanNextVY;
+                this.row = r;
+                this.col = c;
+            } else {
+                r = this.row + this.vy;
+                c = this.col + this.vx;
+                t = board.cells[r][c];
+
+                if (t == ' ' || t == '.') {
+                    this.row = r;
+                    this.col = c;
+                } else {
+                    this.vx = 0;
+                    this.vy = 0;
+                }
+
+            }
+            if (t == '.') {
+                board.cells[r][c] = ' ';
+                board.score+=100;
+            }
+
+        }
+
+        var pacmanNextVX = 0;
+        var pacmanNextVY = 0;
+
+        function keyboardHandler(e) {
+            board.lastKeyEvent = e;
+            if (e.keyCode == '38') {
+                // up arrow
+                pacmanNextVX = 0;
+                pacmanNextVY = -1;
+            } else if (e.keyCode == '40') {
+                // down arrow
+                pacmanNextVX = 0;
+                pacmanNextVY = 1;
+            } else if (e.keyCode == '37') {
+                // left arrow
+                pacmanNextVX = -1;
+                pacmanNextVY = 0;
+            } else if (e.keyCode == '39') {
+                // right arrow
+                pacmanNextVX = 1;
+                pacmanNextVY = 0;
+            }
+
+        }
+
+        document.onkeydown = keyboardHandler;
+
+        function pacmanInit() {
+            /*$("#FPSsel").change(function(){
+                            console.log($("#FPSsel").val());
+                            $("#FPSval").html($("#FPSsel").val());
+            });*/
+            board = new Board(boardText);
+            board.drawBoard();
+
+            setInterval(function () {
+                board.move();
+                board.drawBoard();
+                $("#FPSval").html($("#FPSsel").val());
+
+
+            }, FPS);
+        }
+
+        $(document).ready(pacmanInit);
+        
+        
+                            
+    </script>
+</head>
+
+<body>
+    <div id="controles" class="controles">
+        <b>Controles</b><br><br>
+        <label for="FPS">FPS</label>
+        <input id="FPSsel" value="100" type="range" max="2000" min="50" name="FPS">
+        <div id="FPSval">100</div>
+        <br>
+        <input type=button>
+    </div>
+    <div id="boardDiv">
+
+    </div>
+
+    <div id="statsDiv">
+
+    </div>
+    
+</body>
+
+</html>
