@@ -6,9 +6,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="algorythems.js"></script>
+    <script src="max.js"></script>
     <script>
         var FPS = 100;
-        
+
         var boardText = [
             "###############################################",
             "#..........r..........#.......................#",
@@ -16,7 +17,7 @@
             "#.###.................#............d......###.#",
             "#.###.########.#####.#######.#####.######.###.#",
             "#.###.########.#####.#######.#####.######.###.#",
-            "#..............#####%#######.#####............#",
+            "#..............#####%#######.#####.....v......#",
             "#.###.########.#####.#######.#####.######.###.#",
             "#.###.########.#####.#######.#####.######.###.#",
             "#.###.....l...........#..........l........###.#",
@@ -41,7 +42,7 @@
         }
 
         function Board(boardText) {
-            this.score=0;
+            this.score = 0;
 
             //2d array with element for each cell on board
             this.cells = [];
@@ -82,7 +83,11 @@
                         } else if (t == "d") {
                             m.move = moveRandom;
                             m.icon = "monster-blue.png"
+                        } else if (t == "v") {
+                            m.move = selbeCord;
+                            m.icon = "monster-green.png"
                         }
+
 
                         this.entities.push(m);
                         t = ".";
@@ -95,12 +100,12 @@
 
             tmp += "</table>";
             boardDiv.innerHTML = tmp;
-            
+
             for (i in this.entities) {
-                    var m = this.entities[i];
-                    var cell = $("#" + m.row + "-" + m.col);
-                    cell.html("<img src='" + m.icon + "'/>");
-                }
+                var m = this.entities[i];
+                var cell = $("#" + m.row + "-" + m.col);
+                cell.html("<img src='" + m.icon + "'/>");
+            }
 
             Board.prototype.drawBoard = function () {
                 for (r = 0; r < this.height; r++) {
@@ -134,13 +139,13 @@
 
                 for (i in this.entities) {
                     var m = this.entities[i];
-                    statsDiv.innerHTML += "<div id='"+i+"' class='statsdiv'></div>";
+                    statsDiv.innerHTML += "<div id='" + i + "' class='statsdiv'></div>";
                     var tmp = "Entity " + i + ":<br/>";
                     tmp += "icon :" + "<img src='" + m.icon + "'/><br/>";
                     tmp += "vx: " + m.vx + "<br/>";
                     tmp += "vy: " + m.vy + "<br/>";
                     //statsDiv.innerHTML += "<br/>";
-                    $("#"+i).html(tmp);
+                    $("#" + i).html(tmp);
                 }
 
             }
@@ -150,7 +155,7 @@
                     this.entities[i].move(this.entities[i]);
                 }
                 //check if hit by monster
-                
+
             }
 
         }
@@ -219,7 +224,7 @@
             }
             if (t == '.') {
                 board.cells[r][c] = ' ';
-                board.score+=100;
+                board.score += 100;
             }
 
         }
@@ -269,15 +274,14 @@
         }
 
         $(document).ready(pacmanInit);
-        
-        
-                            
     </script>
 </head>
 
 <body>
     <div id="controles" class="controles">
-        <b>Controles</b><br><br>
+        <b>Controles</b>
+        <br>
+        <br>
         <label for="FPS">FPS</label>
         <input id="FPSsel" value="100" type="range" max="2000" min="50" name="FPS">
         <div id="FPSval">100</div>
@@ -291,7 +295,7 @@
     <div id="statsDiv">
 
     </div>
-    
+
 </body>
 
 </html>
