@@ -356,8 +356,9 @@
             function loop() {
                 board.move();
                 board.drawBoard();
-                $("#FPSval").html($("#FPSsel").val());
-                FPS = $("#FPSsel").val();
+                var FPS = Math.round(9.5*$("#FPSsel").val()+50);
+                $("#FPSval").html(Math.round(1000/FPS));
+                //FPS = $("#FPSsel").val();
                 setTimeout(loop, FPS);
 
 
@@ -375,7 +376,7 @@
         <br>
         <br>
         <label for="FPS">FPS</label>
-        <input id="FPSsel" value="100" type="range" max="1000" min="10" name="FPS">
+        <input id="FPSsel" value="0" type="range" max="50" min="0" name="FPS">
         <div id="FPSval">100</div>
         <br>
         <input type=button>
