@@ -1,27 +1,10 @@
-function ImmerRechts(entity) {
-    moveLeftRight(entity, 1);
-}
-
-function ImmerLinks(entity) {
-    moveLeftRight(entity, -1);
-}
-
-function Zufaellig(entity) {
-    if (Math.floor(Math.random() * 2) == 0) {
-        moveLeftRight(entity, -1);
-    } else {
-        moveLeftRight(entity, 1);
-    }
-
-}
-
-var moveLeftRight = function (entity, dir) {
-    var r = entity.y + entity.vy;
-    var c = entity.x + entity.vx;
-
-    var t = entity.board.cells[r][c];
-    if (t != ' ' && t != '.') {
-        if (entity.vx != 0) {
+function moveLeftRight(entity, dir) {
+    "use strict";
+    var r = entity.y + entity.vy,
+        c = entity.x + entity.vx,
+        t = entity.board.cells[r][c];
+    if (t !== ' ' && t !== '.') {
+        if (entity.vx !== 0) {
             entity.vy = entity.vx * dir;
             entity.vx = 0;
         } else {
@@ -35,44 +18,65 @@ var moveLeftRight = function (entity, dir) {
     }
 }
 
+function ImmerRechts(entity) {
+    "use strict";
+    moveLeftRight(entity, 1);
+}
+
+function ImmerLinks(entity) {
+    "use strict";
+    moveLeftRight(entity, -1);
+}
+
+function Zufaellig(entity) {
+    "use strict";
+    if (Math.floor(Math.random() * 2) === 0) {
+        moveLeftRight(entity, -1);
+    } else {
+        moveLeftRight(entity, 1);
+    }
+
+}
+
+
+
 function Blickkontakt(m) {
-    sichtX = m.x;
-    sichtY = m.y;
+    "use strict";
+    var sichtX = m.x,
+        sichtY = m.y;
 
     try {
-        //if (m.x != m.board.player.x && m.y != m.board.player.y) {
-        while (m.board.cells[sichtY][sichtX] != "#") {
-            if (sichtX == m.board.player.x && sichtY == m.board.player.y) {
+        while (m.board.cells[sichtY][sichtX] !== "#") {
+            if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
                 throw [1, 0];
             }
-            sichtX++;
+            sichtX += 1;
         }
         sichtX = m.x;
-        sichtY = m.y
-        while (m.board.cells[sichtY][sichtX] != "#") {
-            if (sichtX == m.board.player.x && sichtY == m.board.player.y) {
+        sichtY = m.y;
+        while (m.board.cells[sichtY][sichtX] !== "#") {
+            if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
                 throw [-1, 0];
             }
 
-            sichtX--;
+            sichtX -= 1;
         }
         sichtX = m.x;
         sichtY = m.y;
-        while (m.board.cells[sichtY][sichtX] != "#") {
-            if (sichtX == m.board.player.x && sichtY == m.board.player.y) {
+        while (m.board.cells[sichtY][sichtX] !== "#") {
+            if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
                 throw [0, 1];
             }
-            sichtY++;
+            sichtY += 1;
         }
         sichtX = m.x;
         sichtY = m.y;
-        while (m.board.cells[sichtY][sichtX] != "#") {
-            if (sichtX == m.board.player.x && sichtY == m.board.player.y) {
+        while (m.board.cells[sichtY][sichtX] !== "#") {
+            if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
                 throw [0, -1];
             }
-            sichtY--;
+            sichtY -= 1;
         }
-        //}
         Zufaellig(m);
     } catch (err) {
         m.bewegeRichtung(err[0], err[1]);
@@ -80,8 +84,9 @@ function Blickkontakt(m) {
 }
 
 function SelbePosition(m) {
+    "use strict";
     if (m.cooldown) {
-        player = m.board.player;
+        var player = m.board.player;
         if (m.x < player.x) {
             m.bewegeRichtung(1, 0);
         } else if (m.x > player.x) {
@@ -97,4 +102,4 @@ function SelbePosition(m) {
     m.cooldown = !m.cooldown;
 
 }
-AIs = [SelbePosition, Blickkontakt, ImmerRechts, ImmerLinks, Zufaellig];
+var AIs = [SelbePosition, Blickkontakt, ImmerRechts, ImmerLinks, Zufaellig];

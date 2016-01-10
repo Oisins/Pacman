@@ -32,28 +32,28 @@
         var board;
 
         function Entity(board, row, col, icon) {
-            this.board = board
+            this.board = board;
             this.x = col;
-            this.y = row
+            this.y = row;
             this.icon = icon;
-
+            
             this.vx = 1;
             this.vy = 0;
 
-            Entity.prototype.move = function () {}
+            Entity.prototype.move = function () {};
             Entity.prototype.bewegeRichtung = function (x, y) {
                 this.vx = x;
                 this.vy = y;
-                var tmpX = this.x + this.vx;
-                var tmpY = this.y + this.vy;
-                if (this.board.cells[tmpY][tmpX] != "#") {
+                var tmpX = this.x + this.vx,
+                    tmpY = this.y + this.vy;
+                if (this.board.cells[tmpY][tmpX] !== "#") {
                     this.x += this.vx;
                     this.y += this.vy;
                 } else {
                     this.vx = 0;
                     this.vy = 0;
                 }
-            }
+            };
         }
 
         function Board(boardText) {
@@ -66,25 +66,22 @@
             this.height = boardText.length;
 
             this.entities = [];
-            this.player;
+            this.player = "";
             this.lastKeyEvent = "";
 
-            var images = ["monster-green.png", "monster-orange.png", "monster-red.png", "monster-red.png", "monster-blue.png"];
-
-            var boardDiv = document.getElementById("board");
-
-
-            var tmp = "<table>";
+            var images = ["monster-green.png", "monster-orange.png", "monster-red.png", "monster-red.png", "monster-blue.png"],
+                boardDiv = document.getElementById("board"),
+                tmp = "<table>";
 
             //convert the boar to a 2d array
-            for (r = 0; r < this.height; r++) {
+            for (r = 0; r < this.height; r += 1) {
                 tmp += "<tr>";
-                this.cells[r] = new Array();
-                for (c = 0; c < this.width; c++) {
+                this.cells[r] = [];
+                for (c = 0; c < this.width; c += 1) {
                     var t = boardText[r].substr(c, 1);
-                    if (t == "#" || t == ".") {
+                    if (t === "#" || t === ".") {
                         //wall or coin
-                    } else if (t == "%") {
+                    } else if (t === "%") {
                         this.player = new Entity(this, r, c, "pacman.png");
                         this.player.move = movePacman;
                         this.entities.push(this.player);
@@ -118,7 +115,7 @@
             for (m in this.entities) {
                 obj = this.entities[m];
                 disabled = "";
-                if (obj == this.player) { // KI Auswahl für Spieler Entity deaktivieren
+                if (obj === this.player) { // KI Auswahl für Spieler Entity deaktivieren
                     disabled = "disabled";
                 }
                 stats += $.validator.format(`<div class="statsdiv">
