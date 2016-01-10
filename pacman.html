@@ -14,9 +14,9 @@
 
         var boardText = [
             "#############################################",
-            "#..........r..........#.........s...........#",
+            "#..........2..........#.........1...........#",
             "#.###.###############...###############.###.#",
-            "#.###.................#v...........d....###.#",
+            "#.###.................#0...........4....###.#",
             "#.###.########.#####.###.#####.########.###.#",
             "#.###.########.#####.###.#####.########.###.#",
             "#..............#####.###.#####..............#",
@@ -68,7 +68,9 @@
             this.entities = [];
             this.player;
             this.lastKeyEvent = "";
-
+            
+            var images = ["monster-green.png", "monster-orange.png", "monster-red.png", "monster-red.png", "monster-blue.png"];
+            
             var boardDiv = document.getElementById("boardDiv");
 
 
@@ -90,21 +92,9 @@
                     } else {
                         //assume monster
                         var m = new Entity(this, r, c, "monster.png");
-
-                        if (t == "r") {
-                            m.move = moveRight;
-                        } else if (t == "l") {
-                            m.move = moveLeft;
-                        } else if (t == "d") {
-                            m.move = moveRandom;
-                            m.icon = "monster-blue.png"
-                        } else if (t == "v") {
-                            m.move = selbeCord;
-                            m.icon = "monster-green.png"
-                        } else if (t == "s") {
-                            m.move = sicht;
-                            m.icon = "monster-orange.png"
-                        }
+                        
+                        m.move = AIs[t];
+                        m.icon = images[t];
 
 
                         this.entities.push(m);
@@ -175,9 +165,9 @@
 
 
                 statsDiv.innerHTML = "";
-                statsDiv.innerHTML += "score:" + this.score + "<br/>";
-                statsDiv.innerHTML += "w:" + this.width + "<br/>";
-                statsDiv.innerHTML += "h:" + this.height + "<br/>";
+                statsDiv.innerHTML += '<div class="score" style="font-size: 34;">Punkte:' + this.score + "</div>";
+                /*statsDiv.innerHTML += "w:" + this.width + "<br/>";
+                statsDiv.innerHTML += "h:" + this.height + "<br/>";*/
                 statsDiv.innerHTML += "lastKeyEvent:" + this.lastKeyEvent.keyCode + "<br/>";
                 statsDiv.innerHTML += "pacmanNextVX:" + pacmanNextVX + "<br/>";
                 statsDiv.innerHTML += "pacmanNextVY:" + pacmanNextVY + "<br/>";
@@ -188,7 +178,7 @@
                     var options = "";
 
                     var debug = $.validator.format(`<div>
-                        Entity  {0}<br>
+                        <center><b>Entity  {0}</b></center><br>
                         Icon: <img src = "{1}" /> <br />
                         vx: {2} <br>
                         vy: {3} <br>
@@ -332,6 +322,17 @@
 </head>
 
 <body>
+    
+    <div id="boardDiv">
+
+    </div>
+    <div id="statsDiv">
+
+    </div>
+    <div id="debug">
+    
+    </div>
+    <div>
     <div id="controles" class="controles">
         <b>Einstellungen</b>
         <br>
@@ -343,14 +344,6 @@
         <button id="start">Start</button>
         <button id="stop">Stop</button>
     </div>
-    <div id="boardDiv">
-
-    </div>
-    <div id="statsDiv">
-
-    </div>
-    <div id="debug">
-
     </div>
 
 </body>
