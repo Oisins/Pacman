@@ -123,16 +123,19 @@
                 var m = this.entities[i];
                 var cell = $("#" + m.y + "-" + m.x);
                 cell.html("<img src='" + m.icon + "'/>");
-            } 
-            var options = "";
-            for (m in board.entities) {
-                options += "<select>";
-                for (ai in AIs) {
-                    options += "<option>" + ai + "</option>";
-                }
-                options += "</select>";
             }
-            $("#Holder").html(options);
+            var stats = "";
+            for (m in this.entities) {
+                console.log(m);
+                stats += '<div class="statsdiv"><div id="' + m + '"></div><select id="s' + m + '">';
+
+                for (ai in AIs) {
+                    console.log(ai);
+                    stats += "<option>" + ai + "</option>";
+                }
+                stats += "<select></div>";
+            }
+            $("#debug").html(stats);
 
             Board.prototype.drawBoard = function () {
                 for (r = 0; r < this.height; r++) {
@@ -170,7 +173,7 @@
                     var m = this.entities[i];
                     var options = "";
 
-                    var debug = $.validator.format(`<div class="statsdiv">
+                    var debug = $.validator.format(`<div>
                         Entity  {0}<br>
                         Icon: <img src = "{1}" /> <br />
                         vx: {2} <br>
@@ -178,7 +181,7 @@
                         x: {4} <br>
                         y: {5} <br>
                         </div>`, [i, m.icon, m.vx, m.vy, m.x, m.y]);
-                    statsDiv.innerHTML += debug;
+                    $("#" + i).html(debug);
                 }
 
             }
@@ -283,6 +286,15 @@
         document.onkeydown = keyboardHandler;
 
         function pacmanInit() {
+            Running = true;
+            $("#start").click(function () {
+                Running = true;
+                setTimeout(loop, FPS);
+            });
+            $("#stop").click(function () {
+                Running = false;
+            });
+
             /*$("#FPSsel").change(function(){
                             console.log($("#FPSsel").val());
                             $("#FPSval").html($("#FPSsel").val());
@@ -296,7 +308,9 @@
                 var FPS = Math.round(9.5 * $("#FPSsel").val() + 50);
                 $("#FPSval").html(Math.round(1000 / FPS));
                 //FPS = $("#FPSsel").val();
-                setTimeout(loop, FPS);
+                if(Running){
+                    setTimeout(loop, FPS);
+                }
 
 
             }
@@ -309,22 +323,24 @@
 
 <body>
     <div id="controles" class="controles">
-        <b>Controles</b>
+        <b>Einstellungen</b>
         <br>
         <br>
         <label for="FPS">FPS</label>
         <input id="FPSsel" value="0" type="range" max="50" min="0" name="FPS">
         <div id="FPSval">100</div>
         <br>
-        <input type=button>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
     </div>
     <div id="boardDiv">
 
     </div>
-    <div id="Holder">
-        <div id="statsDiv">
+    <div id="statsDiv">
 
-        </div>
+    </div>
+    <div id="debug">
+
     </div>
 
 </body>
