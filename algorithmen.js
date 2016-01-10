@@ -1,12 +1,12 @@
-function moveRight(entity) {
+function ImmerRechts(entity) {
     moveLeftRight(entity, 1);
 }
 
-function moveLeft(entity) {
+function ImmerLinks(entity) {
     moveLeftRight(entity, -1);
 }
 
-function moveRandom(entity) {
+function Zufaellig(entity) {
     if (Math.floor(Math.random() * 2) == 0) {
         moveLeftRight(entity, -1);
     } else {
@@ -15,7 +15,27 @@ function moveRandom(entity) {
 
 }
 
-function sicht(m) {
+var moveLeftRight = function (entity, dir) {
+    var r = entity.y + entity.vy;
+    var c = entity.x + entity.vx;
+
+    var t = entity.board.cells[r][c];
+    if (t != ' ' && t != '.') {
+        if (entity.vx != 0) {
+            entity.vy = entity.vx * dir;
+            entity.vx = 0;
+        } else {
+            entity.vx = -(entity.vy * dir);
+            entity.vy = 0;
+        }
+        entity.move(entity);
+    } else {
+        entity.y = r;
+        entity.x = c;
+    }
+}
+
+function Blickkontakt(m) {
     sichtX = m.x;
     sichtY = m.y;
 
@@ -53,13 +73,13 @@ function sicht(m) {
             sichtY--;
         }
         //}
-        moveRandom(m);
+        Zufaellig(m);
     } catch (err) {
         m.bewegeRichtung(err[0], err[1]);
     }
 }
 
-function selbeCord(m) {
+function SelbePosition(m) {
     if (m.cooldown) {
         player = m.board.player;
         if (m.x < player.x) {
@@ -77,4 +97,4 @@ function selbeCord(m) {
     m.cooldown = !m.cooldown;
 
 }
-AIs = [selbeCord, sicht, moveRight, moveLeft, moveRandom];
+AIs = [SelbePosition, Blickkontakt, ImmerRechts, ImmerLinks, Zufaellig];

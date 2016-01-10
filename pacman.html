@@ -2,13 +2,14 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="style.css">
     <title>Pacman</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="pacman.png" />
+    <!-- JQuery Import -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="algorythems.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.js"></script>
-    <!--<script src="max.js"></script>-->
+    
+    <script src="algorithmen.js"></script>
     <script>
         var FPS = 100;
 
@@ -25,8 +26,7 @@
             "#.###.................#.................###.#",
             "#.###.###############.#.###############.###.#",
             "#...........................................#",
-            "#############################################"
-        ];
+            "#############################################"];
 
 
         var board;
@@ -59,7 +59,7 @@
         function Board(boardText) {
             this.score = 0;
 
-            //2d array with element for each cell on board
+            //2d Liste des Brettes
             this.cells = [];
 
             this.width = boardText[0].length;
@@ -68,10 +68,10 @@
             this.entities = [];
             this.player;
             this.lastKeyEvent = "";
-            
+
             var images = ["monster-green.png", "monster-orange.png", "monster-red.png", "monster-red.png", "monster-blue.png"];
-            
-            var boardDiv = document.getElementById("boardDiv");
+
+            var boardDiv = document.getElementById("board");
 
 
             var tmp = "<table>";
@@ -92,7 +92,7 @@
                     } else {
                         //assume monster
                         var m = new Entity(this, r, c, "monster.png");
-                        
+
                         m.move = AIs[t];
                         m.icon = images[t];
 
@@ -109,16 +109,16 @@
             tmp += "</table>";
             boardDiv.innerHTML = tmp;
 
-            for (i in this.entities) {
+            /*for (i in this.entities) {
                 var m = this.entities[i];
                 var cell = $("#" + m.y + "-" + m.x);
                 cell.html("<img src='" + m.icon + "'/>");
-            }
+            }*/
             var stats = "";
             for (m in this.entities) {
                 obj = this.entities[m];
                 disabled = "";
-                if (obj == this.player) {
+                if (obj == this.player) { // KI Auswahl für Spieler Entity deaktivieren
                     disabled = "disabled";
                 }
                 stats += $.validator.format(`<div class="statsdiv">
@@ -143,7 +143,7 @@
                 console.log(this.entities[m].move.name);*/
             }
             $("#debug").html(stats);
-            
+
             ////////////////////////////////////////
             // DRAW DRAW DRAW DRAW DRAW DRAW DRAW //
             ////////////////////////////////////////
@@ -169,7 +169,7 @@
                     cell.html("<img src='" + m.icon + "'/>");
                 }
 
-
+                // Debug Info
                 statsDiv.innerHTML = "";
                 statsDiv.innerHTML += '<div class="score" style="font-size: 34;">Punkte:' + this.score + "</div>";
                 /*statsDiv.innerHTML += "w:" + this.width + "<br/>";
@@ -204,27 +204,6 @@
 
             }
 
-        }
-
-
-        var moveLeftRight = function (entity, dir) {
-            var r = entity.y + entity.vy;
-            var c = entity.x + entity.vx;
-
-            var t = entity.board.cells[r][c];
-            if (t != ' ' && t != '.') {
-                if (entity.vx != 0) {
-                    entity.vy = entity.vx * dir;
-                    entity.vx = 0;
-                } else {
-                    entity.vx = -(entity.vy * dir);
-                    entity.vy = 0;
-                }
-                entity.move(entity);
-            } else {
-                entity.y = r;
-                entity.x = c;
-            }
         }
 
         ///////////////////////////////////////////
@@ -265,7 +244,7 @@
         var pacmanNextVX = 0;
         var pacmanNextVY = 0;
 
-        function keyboardHandler(e) {
+        function keyboardHandler(e) { // Spieler Eingabe Auswerten
             board.lastKeyEvent = e;
             if (e.keyCode == '38') {
                 // up arrow
@@ -292,33 +271,33 @@
         function pacmanInit() {
             board = new Board(boardText);
             board.drawBoard();
-            
+
             $("#FPSval").html(1 / FPS * 1000);
             $("#speed").val(1 / FPS * 1000);
-            
+
             Running = true;
             $("#start").click(function () { // Spiel Starten
                 Running = true;
                 setTimeout(loop, FPS);
             });
-            
+
             $("#stop").click(function () { // Spiel Pausieren
                 Running = false;
             });
-            
+
             $("select").change(function () { // Geschwindigkeit ändern
                 m = $(this);
                 attrbute = m.attr("data-entity");
                 console.log(AIs[1]);
                 board.entities[attrbute].move = AIs[m.prop("selectedIndex")];
             });
-            
-            
+
+
 
             function loop() { // Gameloop
                 board.move();
                 board.drawBoard();
-                
+
                 var FPS = Math.round(1 / $("#speed").val() * 1000);
                 $("#FPSval").html($("#speed").val());
                 //FPS = $("#FPSsel").val();
@@ -336,28 +315,28 @@
 </head>
 
 <body>
-    
-    <div id="boardDiv">
+
+    <div id="board">
 
     </div>
     <div id="statsDiv">
 
     </div>
     <div id="debug">
-    
+
     </div>
     <div>
-    <div id="controles" class="controles">
-        <b>Einstellungen</b>
-        <br>
-        <br>
-        <label for="FPS">FPS</label>
-        <input id="speed" value="1" type="range" min="1" max="20" name="FPS">
-        <div id="FPSval"></div>
-        <br>
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-    </div>
+        <div id="controles" class="controles">
+            <b>Einstellungen</b>
+            <br>
+            <br>
+            <label for="FPS">FPS</label>
+            <input id="speed" value="1" type="range" min="1" max="20" name="FPS">
+            <div id="FPSval"></div>
+            <br>
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+        </div>
     </div>
 
 </body>
