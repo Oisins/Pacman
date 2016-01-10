@@ -126,14 +126,28 @@
             }
             var stats = "";
             for (m in this.entities) {
-                console.log(m);
-                stats += '<div class="statsdiv"><div id="' + m + '"></div><select id="s' + m + '">';
+                obj = this.entities[m];
+                disabled = "";
+                if (obj == this.player) {
+                    disabled = "disabled";
+                }
+                stats += $.validator.format('<div class="statsdiv"><div id="{0}"></div><select {2} id="s{0}" data-entity="{0}" value="{1}">', [m, obj.name, disabled]);
 
                 for (ai in AIs) {
-                    console.log(ai);
-                    stats += "<option>" + ai + "</option>";
+                    selected = "";
+                    if (AIs[ai].name == obj.move.name) {
+                        selected = "selected";
+                    }
+                    name = AIs[ai].name;
+                    if (obj == this.player) {
+                        disabled = "disabled";
+                        name = "Spieler Eingabe";
+                    }
+                    stats += $.validator.format('<option {0}>{1}</option>', [selected, name]);
                 }
                 stats += "<select></div>";
+                /*$("#s" + m).val(this.entities[m].move.name);
+                console.log(this.entities[m].move.name);*/
             }
             $("#debug").html(stats);
 
@@ -220,11 +234,6 @@
         ///////////////////////////////////////////
         //            Algorythmen                //
         ///////////////////////////////////////////
-
-
-
-
-
         ///////////////////////////////////////////
 
         var movePacman = function () {
@@ -286,6 +295,8 @@
         document.onkeydown = keyboardHandler;
 
         function pacmanInit() {
+            board = new Board(boardText);
+            board.drawBoard();
             Running = true;
             $("#start").click(function () {
                 Running = true;
@@ -294,13 +305,12 @@
             $("#stop").click(function () {
                 Running = false;
             });
-
-            /*$("#FPSsel").change(function(){
-                            console.log($("#FPSsel").val());
-                            $("#FPSval").html($("#FPSsel").val());
-            });*/
-            board = new Board(boardText);
-            board.drawBoard();
+            $("select").change(function () {
+                m = $(this);
+                attrbute = m.attr("data-entity");
+                console.log(AIs[1]);
+                board.entities[attrbute].move = AIs[m.prop("selectedIndex")];
+            });
 
             function loop() {
                 board.move();
@@ -308,7 +318,7 @@
                 var FPS = Math.round(9.5 * $("#FPSsel").val() + 50);
                 $("#FPSval").html(Math.round(1000 / FPS));
                 //FPS = $("#FPSsel").val();
-                if(Running){
+                if (Running) {
                     setTimeout(loop, FPS);
                 }
 

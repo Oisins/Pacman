@@ -77,4 +77,4 @@ function selbeCord(m) {
     m.cooldown = !m.cooldown;
 
 }
-AIs = {selbeCord, sicht, moveRight, moveLeft, moveRandom};
+AIs = [selbeCord, sicht, moveRight, moveLeft, moveRandom];
