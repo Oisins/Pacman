@@ -132,10 +132,7 @@
                 }
                 options += "</select>";
             }
-
-            KI:  {
-                6
-            } < /select>
+            $("#Holder").html(options);
 
             Board.prototype.drawBoard = function () {
                 for (r = 0; r < this.height; r++) {
