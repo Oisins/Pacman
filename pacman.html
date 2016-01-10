@@ -121,7 +121,10 @@
                 if (obj == this.player) {
                     disabled = "disabled";
                 }
-                stats += $.validator.format('<div class="statsdiv"><div id="{0}"></div><select {2} id="s{0}" data-entity="{0}" value="{1}">', [m, obj.name, disabled]);
+                stats += $.validator.format(`<div class="statsdiv">
+                                            <div id="{0}"></div><br>
+                                            KI Auswahl<br>
+                                            <select {1} id="s{0}" data-entity="{0}" value="{2}">`, [m, disabled, obj.name]);
 
                 for (ai in AIs) {
                     selected = "";
@@ -140,7 +143,10 @@
                 console.log(this.entities[m].move.name);*/
             }
             $("#debug").html(stats);
-
+            
+            ////////////////////////////////////////
+            // DRAW DRAW DRAW DRAW DRAW DRAW DRAW //
+            ////////////////////////////////////////
             Board.prototype.drawBoard = function () {
                 for (r = 0; r < this.height; r++) {
                     for (c = 0; c < this.width; c++) {
@@ -178,7 +184,7 @@
                     var options = "";
 
                     var debug = $.validator.format(`<div>
-                        <center><b>Entity  {0}</b></center><br>
+                        <center><b>Entity  {0}</b></center>
                         Icon: <img src = "{1}" /> <br />
                         vx: {2} <br>
                         vy: {3} <br>
@@ -223,7 +229,6 @@
 
         ///////////////////////////////////////////
         //            Algorythmen                //
-        ///////////////////////////////////////////
         ///////////////////////////////////////////
 
         var movePacman = function () {
@@ -287,26 +292,35 @@
         function pacmanInit() {
             board = new Board(boardText);
             board.drawBoard();
+            
+            $("#FPSval").html(1 / FPS * 1000);
+            $("#speed").val(1 / FPS * 1000);
+            
             Running = true;
-            $("#start").click(function () {
+            $("#start").click(function () { // Spiel Starten
                 Running = true;
                 setTimeout(loop, FPS);
             });
-            $("#stop").click(function () {
+            
+            $("#stop").click(function () { // Spiel Pausieren
                 Running = false;
             });
-            $("select").change(function () {
+            
+            $("select").change(function () { // Geschwindigkeit ändern
                 m = $(this);
                 attrbute = m.attr("data-entity");
                 console.log(AIs[1]);
                 board.entities[attrbute].move = AIs[m.prop("selectedIndex")];
             });
+            
+            
 
-            function loop() {
+            function loop() { // Gameloop
                 board.move();
                 board.drawBoard();
-                var FPS = Math.round(9.5 * $("#FPSsel").val() + 50);
-                $("#FPSval").html(Math.round(1000 / FPS));
+                
+                var FPS = Math.round(1 / $("#speed").val() * 1000);
+                $("#FPSval").html($("#speed").val());
                 //FPS = $("#FPSsel").val();
                 if (Running) {
                     setTimeout(loop, FPS);
@@ -338,8 +352,8 @@
         <br>
         <br>
         <label for="FPS">FPS</label>
-        <input id="FPSsel" value="0" type="range" max="50" min="0" name="FPS">
-        <div id="FPSval">100</div>
+        <input id="speed" value="1" type="range" min="1" max="20" name="FPS">
+        <div id="FPSval"></div>
         <br>
         <button id="start">Start</button>
         <button id="stop">Stop</button>
