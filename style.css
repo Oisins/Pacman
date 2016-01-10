@@ -21,23 +21,30 @@ td {
     text-align: center;
 }
 
-th, td {
+th,
+td {
     padding: 0px;
 }
+
 .controles {
-    float:left;
+    float: left;
     border: 1px solid black;
     padding: 5px;
     text-align: center;
     height: inherit;
 }
-img{
-    width: 14px;
-    height: 14px;
+
+table img {
+    width: 16px;
+    height: 16px;
     position: relative;
 }
-.score{
+
+.score {
     font-size: 34px;
     font-family: monospace;
     background: 1px solid black;
+}
+#DPad{
+    float: right;
 }

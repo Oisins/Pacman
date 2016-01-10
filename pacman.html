@@ -242,24 +242,30 @@
         var pacmanNextVY = 0;
 
         function keyboardHandler(e) { // Spieler Eingabe Auswerten
+            var img = "";
             board.lastKeyEvent = e;
             if (e.keyCode == '38') {
                 // up arrow
                 pacmanNextVX = 0;
                 pacmanNextVY = -1;
+                img = "DPadUp.png";
             } else if (e.keyCode == '40') {
                 // down arrow
                 pacmanNextVX = 0;
                 pacmanNextVY = 1;
+                img = "DPadDown.png";
             } else if (e.keyCode == '37') {
                 // left arrow
                 pacmanNextVX = -1;
                 pacmanNextVY = 0;
+                img = "DPadLeft.png";
             } else if (e.keyCode == '39') {
                 // right arrow
                 pacmanNextVX = 1;
                 pacmanNextVY = 0;
+                img = "DPadRight.png";
             }
+            $("#DPad").attr("src", img);
 
         }
 
@@ -312,7 +318,7 @@
 </head>
 
 <body>
-
+    <img id="DPad" src="DPadDefault.png" width="200" height="200"/>
     <div id="board">
 
     </div>
