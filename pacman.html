@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="pacman.png" />
     <!-- JQuery Import -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.js"></script>
-    
     <script src="algorithmen.js"></script>
     <script>
         var FPS = 100;
@@ -145,6 +144,8 @@
             // DRAW DRAW DRAW DRAW DRAW DRAW DRAW //
             ////////////////////////////////////////
             Board.prototype.drawBoard = function () {
+                var r = 0,
+                    c = 0;
                 for (r = 0; r < this.height; r++) {
                     for (c = 0; c < this.width; c++) {
                         var cellDiv = $("#" + r + "-" + c);
@@ -316,10 +317,12 @@
 
         $(document).ready(pacmanInit);
     </script>
+    
+    
 </head>
 
 <body>
-    <img id="DPad" src="DPadDefault.png"/>
+    <img id="DPad" src="DPadDefault.png" width="200" height="200"/>
     <div id="board">
 
     </div>
