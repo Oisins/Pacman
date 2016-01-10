@@ -79,7 +79,10 @@ function Blickkontakt(m) {
         }
         Zufaellig(m);
     } catch (err) {
-        m.bewegeRichtung(err[0], err[1]);
+        if (m.cooldown) {
+            m.bewegeRichtung(err[0], err[1]);
+        }
+        m.cooldown = !m.cooldown;
     }
 }
 

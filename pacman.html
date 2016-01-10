@@ -168,7 +168,7 @@
 
                 // Debug Info
                 statsDiv.innerHTML = "";
-                statsDiv.innerHTML += '<div class="score" style="font-size: 34;">Punkte:' + this.score + "</div>";
+                statsDiv.innerHTML += '<div class="score" style="font-size: 34;">Punkte: ' + this.score + "</div>";
                 /*statsDiv.innerHTML += "w:" + this.width + "<br/>";
                 statsDiv.innerHTML += "h:" + this.height + "<br/>";*/
                 statsDiv.innerHTML += "lastKeyEvent:" + this.lastKeyEvent.keyCode + "<br/>";
@@ -242,7 +242,7 @@
         var pacmanNextVY = 0;
 
         function keyboardHandler(e) { // Spieler Eingabe Auswerten
-            var img = "";
+            var img = "DPadDefault.png";
             board.lastKeyEvent = e;
             if (e.keyCode == '38') {
                 // up arrow
@@ -300,10 +300,11 @@
             function loop() { // Gameloop
                 board.move();
                 board.drawBoard();
-
-                var FPS = Math.round(1 / $("#speed").val() * 1000);
+                
+                //FPS Anzeige Aktuallisieren
+                var FPS = Math.round(1 / $("#speed").val() * 1000); 
                 $("#FPSval").html($("#speed").val());
-                //FPS = $("#FPSsel").val();
+                
                 if (Running) {
                     setTimeout(loop, FPS);
                 }
@@ -318,7 +319,7 @@
 </head>
 
 <body>
-    <img id="DPad" src="DPadDefault.png" width="200" height="200"/>
+    <img id="DPad" src="DPadDefault.png"/>
     <div id="board">
 
     </div>
