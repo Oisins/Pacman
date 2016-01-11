@@ -123,10 +123,7 @@
                                             <select {1} id="s{0}" data-entity="{0}" value="{2}">`, [m, disabled, obj.name]);
 
                 for (ai in AIs) {
-                    selected = "";
-                    if (AIs[ai].name == obj.move.name) {
-                        selected = "selected";
-                    }
+                    selected = (AIs[ai].name == obj.move.name) ? selected = "selected" : "";
                     name = AIs[ai].name;
                     if (obj == this.player) {
                         disabled = "disabled";
@@ -199,10 +196,10 @@
                     var e = this.entities[i];
                     if ((e.x !== board.player.x || e.y !== board.player.y)) {
                         this.entities[i].move(this.entities[i]);
-                    } else if(e !== board.player){
+                    } else if (e !== board.player) {
                         console.log("LOSE");
                         FPS = 0;
-                    }else{
+                    } else {
                         this.entities[i].move(this.entities[i]);
 
                     }
@@ -300,6 +297,7 @@
                 attrbute = m.attr("data-entity");
                 console.log(AIs[1]);
                 board.entities[attrbute].move = AIs[m.prop("selectedIndex")];
+                board.entities[attrbute].vx = 1;
             });
 
 
@@ -334,24 +332,20 @@
     <div id="board">
 
     </div>
-    <div id="statsDiv">
-
-    </div>
-    <div id="debug">
-
-    </div>
-    <div>
-        <div id="controles" class="controles">
-            <b>Einstellungen</b>
-            <br>
-            <br>
-            <label for="FPS">FPS</label>
-            <input id="speed" value="1" type="range" min="1" max="20" name="FPS">
-            <div id="FPSval"></div>
-            <br>
-            <button id="start">Start</button>
-            <button id="stop">Stop</button>
-        </div>
+    <div id="statsDiv"></div>
+    Einstellungen
+    <br>
+    <div id="debug"></div>
+    <div id="controles" class="controles">
+        <b>Einstellungen</b>
+        <br>
+        <br>
+        <label for="FPS">FPS</label>
+        <input id="speed" value="1" type="range" min="1" max="20" name="FPS">
+        <div id="FPSval"></div>
+        <br>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
     </div>
 
 </body>
