@@ -28,7 +28,7 @@ function ImmerLinks(entity) {
     moveLeftRight(entity, -1);
 }
 
-function Zufaellig(entity) {
+function zufaellig(entity) {
     "use strict";
     if (Math.floor(Math.random() * 2) === 0) {
         moveLeftRight(entity, -1);
@@ -77,7 +77,7 @@ function Blickkontakt(m) {
             }
             sichtY -= 1;
         }
-        Zufaellig(m);
+        zufaellig(m);
     } catch (err) { // Error fangen
         if (m.cooldown) { // Jeden 2. Schritt auslassen -> Langsamer
             m.bewegeRichtung(err[0], err[1]);
@@ -105,4 +105,4 @@ function SelbePosition(m) {
     m.cooldown = !m.cooldown;
 
 }
-var AIs = [SelbePosition, Blickkontakt, ImmerRechts, ImmerLinks, Zufaellig];
+var AIs = [SelbePosition, Blickkontakt, ImmerRechts, ImmerLinks, zufaellig];
