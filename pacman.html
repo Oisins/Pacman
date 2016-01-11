@@ -36,6 +36,8 @@
             this.y = row;
             this.icon = icon;
 
+            var dead = false;
+
             this.vx = 1;
             this.vy = 0;
 
@@ -196,9 +198,9 @@
                     var e = this.entities[i];
                     if ((e.x !== board.player.x || e.y !== board.player.y)) {
                         this.entities[i].move(this.entities[i]);
-                    } else if (e !== board.player) {
-                        console.log("LOSE");
-                        FPS = 0;
+                    } else if (e !== board.player && $("#unsterblich").is(':checked') === false) {
+                        Running = false;
+                        dead = true
                     } else {
                         this.entities[i].move(this.entities[i]);
 
@@ -345,7 +347,11 @@
         <div id="FPSval"></div>
         <br>
         <button id="start">Start</button>
-        <button id="stop">Stop</button>
+        <button id="stop">Stop</button><br><br>
+        <label>
+            Unsterblich
+            <input type="checkbox" id="unsterblich" checked>
+        </label>
     </div>
 
 </body>
