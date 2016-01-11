@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="pacman.png" />
     <!-- JQuery Import -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.js"></script>
+    <script src="jquery.min.js" ></script>
+    <script src="jquery.validate.js"></script>
     <script src="algorithmen.js"></script>
     <script>
         var FPS = 100;
@@ -171,11 +171,11 @@
                 statsDiv.innerHTML = "";
                 statsDiv.innerHTML += '<div class="score" style="font-size: 34;">Punkte: ' + this.score + "</div>";
                 /*statsDiv.innerHTML += "w:" + this.width + "<br/>";
-                statsDiv.innerHTML += "h:" + this.height + "<br/>";*/
+                statsDiv.innerHTML += "h:" + this.height + "<br/>";
                 statsDiv.innerHTML += "lastKeyEvent:" + this.lastKeyEvent.keyCode + "<br/>";
                 statsDiv.innerHTML += "pacmanNextVX:" + pacmanNextVX + "<br/>";
                 statsDiv.innerHTML += "pacmanNextVY:" + pacmanNextVY + "<br/>";
-                statsDiv.innerHTML += "entities:" + this.entities.length + "<br/>";
+                statsDiv.innerHTML += "entities:" + this.entities.length + "<br/>";*/
 
                 for (i in this.entities) {
                     var m = this.entities[i];
@@ -282,6 +282,7 @@
             });
 
             $("#stop").click(function () { // Spiel Pausieren
+
                 Running = false;
             });
 
@@ -304,6 +305,8 @@
                 
                 if (Running) {
                     setTimeout(loop, FPS);
+                }else{
+                    $("#FPSval").html("0");
                 }
 
 
