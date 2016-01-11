@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="pacman.png" />
     <!-- JQuery Import -->
-    <script src="jquery.min.js" ></script>
+    <script src="jquery.min.js"></script>
     <script src="jquery.validate.js"></script>
     <script src="algorithmen.js"></script>
     <script>
@@ -35,7 +35,7 @@
             this.x = col;
             this.y = row;
             this.icon = icon;
-            
+
             this.vx = 1;
             this.vy = 0;
 
@@ -196,9 +196,18 @@
 
             Board.prototype.move = function () {
                 for (i in this.entities) {
-                    this.entities[i].move(this.entities[i]);
+                    var e = this.entities[i];
+                    if ((e.x !== board.player.x || e.y !== board.player.y)) {
+                        this.entities[i].move(this.entities[i]);
+                    } else if(e !== board.player){
+                        console.log("LOSE");
+                        FPS = 0;
+                    }else{
+                        this.entities[i].move(this.entities[i]);
+
+                    }
+
                 }
-                //check if hit by monster
 
             }
 
@@ -298,14 +307,14 @@
             function loop() { // Gameloop
                 board.move();
                 board.drawBoard();
-                
+
                 //FPS Anzeige Aktuallisieren
-                var FPS = Math.round(1 / $("#speed").val() * 1000); 
+                var FPS = Math.round(1 / $("#speed").val() * 1000);
                 $("#FPSval").html($("#speed").val());
-                
+
                 if (Running) {
                     setTimeout(loop, FPS);
-                }else{
+                } else {
                     $("#FPSval").html("0");
                 }
 
@@ -316,12 +325,12 @@
 
         $(document).ready(pacmanInit);
     </script>
-    
-    
+
+
 </head>
 
 <body>
-    <img id="DPad" src="DPadDefault.png" width="200" height="200"/>
+    <img id="DPad" src="DPadDefault.png" width="200" height="200" />
     <div id="board">
 
     </div>

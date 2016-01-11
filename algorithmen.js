@@ -45,14 +45,14 @@ function Blickkontakt(m) {
     var sichtX = m.x,
         sichtY = m.y;
 
-    try {
-        while (m.board.cells[sichtY][sichtX] !== "#") {
-            if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
-                throw [1, 0];
+    try { // Error erwarten
+        while (m.board.cells[sichtY][sichtX] !== "#") { // Solange bis eine Wand da ist
+            if (sichtX === m.board.player.x && sichtY === m.board.player.y) { // Test ob Player da ist
+                throw [1, 0]; // Error Werfen mit Richtungsinformation
             }
-            sichtX += 1;
+            sichtX += 1; // "Augen" Weiterbewegen
         }
-        sichtX = m.x;
+        sichtX = m.x;  //"Augen" Zurücksetzten
         sichtY = m.y;
         while (m.board.cells[sichtY][sichtX] !== "#") {
             if (sichtX === m.board.player.x && sichtY === m.board.player.y) {
@@ -78,11 +78,11 @@ function Blickkontakt(m) {
             sichtY -= 1;
         }
         Zufaellig(m);
-    } catch (err) {
-        if (m.cooldown) {
+    } catch (err) { // Error fangen
+        if (m.cooldown) { // Jeden 2. Schritt auslassen -> Langsamer
             m.bewegeRichtung(err[0], err[1]);
         }
-        m.cooldown = !m.cooldown;
+        m.cooldown = !m.cooldown; // True -> False | False -> True
     }
 }
 
